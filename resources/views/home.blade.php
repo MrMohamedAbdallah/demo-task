@@ -173,10 +173,18 @@
             if(this.dataset.hold == 'true') 
                 return;
 
-            const favID = parseInt(this.dataset.fav);
-            const currentStatus = this.classList.contains('active');
+            toggleStatus(this);
 
-            this.classList.toggle('active');
+        });
+
+        /**
+        * Toggle favorite status
+         */
+         function toggleStatus(fav){
+            const favID = parseInt(fav.dataset.fav);
+            const currentStatus = fav.classList.contains('active');
+
+            fav.classList.toggle('active');
 
             $.ajax({
                 url: "{{ route('fav.toggle') }}",
@@ -187,33 +195,30 @@
                     _token: "{{ csrf_token() }}"
                 },
                 beforeSend: ()=>{
-                    this.dataset.hold = "true";
+                    fav.dataset.hold = "true";
                 },
                 success: (res)=>{
-                    if(res.status){
-                        this.classList.add('active');
-                    } else {
-                        this.classList.remove('active');
-                    }
+                    setActiveClass(fav, res.status);
                 },
                 error: (err)=>{
                     console.log("Request Error");
                     console.error(err);
-                    
-                    if(currentStatus)
-                        this.classList.add('active');
-                    else 
-                        this.classList.remove('active');
-
-                    
+                    setActiveClass(fav, currentStatus);
                 },
                 complete: ()=>{
-                    this.dataset.hold = "false";
+                    fav.dataset.hold = "false";
                 }
 
             });
+         }
 
-        });
+         
+         function setActiveClass(fav, status){
+            if(status)
+                fav.classList.add('active');
+            else 
+                fav.classList.remove('active');
+         }
 
     </script>
 

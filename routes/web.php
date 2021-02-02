@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth']], function(){
     Route::get('/', 'FavController@index');
+    Route::post('/fav', 'FavController@toggle')->name('fav.toggle');
 });
 
 Auth::routes();

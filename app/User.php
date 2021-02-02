@@ -36,4 +36,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the favorites recordings
+     */
+    public function favs(){
+        return $this->hasMany(Fav::class, 'user_id');
+    }
 }
